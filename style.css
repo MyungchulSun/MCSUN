@@ -1,1 +1,110 @@
-/* Add styles here */
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1a1a1a;
+    margin: 0;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: linear-gradient(0deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%),
+                      linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+    background-size: 3px 3px;
+    opacity: 0.3;
+    pointer-events: none;
+    animation: noise 5s infinite linear;
+}
+
+@keyframes noise {
+  0% { transform: translate(0,0); }
+  10% { transform: translate(-5%,-5%); }
+  20% { transform: translate(-10%,5%); }
+  30% { transform: translate(5%,-10%); }
+  40% { transform: translate(-5%,15%); }
+  50% { transform: translate(-10%,-5%); }
+  60% { transform: translate(15%,0); }
+  70% { transform: translate(0,10%); }
+  80% { transform: translate(-15%,0); }
+  90% { transform: translate(10%,5%); }
+  100% { transform: translate(5%,0); }
+}
+
+
+.container {
+    text-align: center;
+    background: #2b2b2b;
+    padding: 40px 60px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 10px 10px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #f0f0f0;
+    text-shadow: 0 0 10px #4CAF50, 0 0 20px #4CAF50;
+}
+
+.lotto-numbers {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+    perspective: 1000px;
+}
+
+.number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: transform 0.5s ease, background-color 0.5s ease;
+    transform-style: preserve-3d;
+}
+
+.number.shaking {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+#generate {
+    padding: 15px 35px;
+    font-size: 22px;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    box-shadow: 0 0 15px #4CAF50, inset 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+#generate:hover {
+    background-color: #5cdb5c;
+    box-shadow: 0 0 25px #5cdb5c, inset 0 0 10px rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
