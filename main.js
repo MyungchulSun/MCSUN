@@ -1,6 +1,8 @@
 
 const generateBtn = document.getElementById("generate");
 const numberSpans = document.querySelectorAll(".number");
+const themeToggleBtn = document.getElementById("theme-toggle");
+const THEME_KEY = "theme";
 
 const colors = [
   "#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5",
@@ -13,11 +15,36 @@ function getRandomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
+function applyTheme(theme) {
+    const useLightMode = theme === "light";
+    document.body.classList.toggle("light-mode", useLightMode);
+    themeToggleBtn.textContent = useLightMode ? "Dark Mode" : "Light Mode";
+    localStorage.setItem(THEME_KEY, useLightMode ? "light" : "dark");
+}
+
+function initializeTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme === "light" || savedTheme === "dark") {
+        applyTheme(savedTheme);
+        return;
+    }
+
+    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    applyTheme(prefersLight ? "light" : "dark");
+}
+
+themeToggleBtn.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("light-mode") ? "dark" : "light";
+    applyTheme(nextTheme);
+});
+
+initializeTheme();
+
 generateBtn.addEventListener("click", () => {
     numberSpans.forEach(span => {
         span.classList.add("shaking");
         span.textContent = '';
-        span.style.backgroundColor = '#2b2b2b';
+        span.style.backgroundColor = '';
     });
 
     setTimeout(() => {
