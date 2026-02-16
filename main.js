@@ -1,65 +1,61 @@
 
-const generateBtn = document.getElementById("generate");
-const numberSpans = document.querySelectorAll(".number");
-const themeToggleBtn = document.getElementById("theme-toggle");
-const THEME_KEY = "theme";
+document.addEventListener('DOMContentLoaded', () => {
+    const numberContainer = document.getElementById('lotto-numbers');
+    const generateBtn = document.getElementById('generate');
+    const themeToggle = document.getElementById('theme-toggle');
+    const THEME_KEY = 'theme';
+    const THEMES = ['dark', 'light', 'colorblind'];
+    const themeLabel = {
+        dark: 'Dark Mode',
+        light: 'Light Mode',
+        colorblind: 'Colorblind Mode'
+    };
 
-const colors = [
-  "#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5",
-  "#2196f3", "#03a9f4", "#00bcd4", "#009688", "#4caf50",
-  "#8bc34a", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800",
-  "#ff5722", "#795548", "#9e9e9e", "#607d8b"
-];
-
-function getRandomColor() {
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function applyTheme(theme) {
-    const useLightMode = theme === "light";
-    document.body.classList.toggle("light-mode", useLightMode);
-    themeToggleBtn.textContent = useLightMode ? "Dark Mode" : "Light Mode";
-    localStorage.setItem(THEME_KEY, useLightMode ? "light" : "dark");
-}
-
-function initializeTheme() {
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme === "light" || savedTheme === "dark") {
-        applyTheme(savedTheme);
-        return;
+    function generateNumbers() {
+        const numbers = new Set();
+        while(numbers.size < 6) {
+            numbers.add(Math.floor(Math.random() * 45) + 1);
+        }
+        return Array.from(numbers).sort((a, b) => a - b);
     }
 
-    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-    applyTheme(prefersLight ? "light" : "dark");
-}
+    function displayNumbers(numbers) {
+        numberContainer.innerHTML = ''; // Clear previous numbers
+        numbers.forEach(number => {
+            const numberElement = document.createElement('div');
+            numberElement.classList.add('number');
+            numberElement.textContent = number;
+            numberContainer.appendChild(numberElement);
+        });
+    }
 
-themeToggleBtn.addEventListener("click", () => {
-    const nextTheme = document.body.classList.contains("light-mode") ? "dark" : "light";
-    applyTheme(nextTheme);
-});
+    function applyTheme(theme) {
+        const selectedTheme = THEMES.includes(theme) ? theme : 'dark';
+        document.body.setAttribute('data-theme', selectedTheme);
+        themeToggle.textContent = `Mode: ${themeLabel[selectedTheme]}`;
+        localStorage.setItem(THEME_KEY, selectedTheme);
+    }
 
-initializeTheme();
+    function getNextTheme(currentTheme) {
+        const currentIndex = THEMES.indexOf(currentTheme);
+        const nextIndex = (currentIndex + 1) % THEMES.length;
+        return THEMES[nextIndex];
+    }
 
-generateBtn.addEventListener("click", () => {
-    numberSpans.forEach(span => {
-        span.classList.add("shaking");
-        span.textContent = '';
-        span.style.backgroundColor = '';
+    generateBtn.addEventListener('click', () => {
+        const lottoNumbers = generateNumbers();
+        displayNumbers(lottoNumbers);
     });
 
-    setTimeout(() => {
-        const lottoNumbers = new Set();
-        while (lottoNumbers.size < 6) {
-            const randomNumber = Math.floor(Math.random() * 45) + 1;
-            lottoNumbers.add(randomNumber);
-        }
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+        applyTheme(getNextTheme(currentTheme));
+    });
 
-        const sortedNumbers = Array.from(lottoNumbers).sort((a, b) => a - b);
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    applyTheme(savedTheme || (prefersLight ? 'light' : 'dark'));
 
-        numberSpans.forEach((span, index) => {
-            span.classList.remove("shaking");
-            span.textContent = sortedNumbers[index];
-            span.style.backgroundColor = getRandomColor();
-        });
-    }, 1000); 
+    // Initial generation
+    displayNumbers(generateNumbers());
 });

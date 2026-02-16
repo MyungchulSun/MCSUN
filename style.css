@@ -1,38 +1,41 @@
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-
 :root {
-    --body-bg: #1a1a1a;
-    --body-text: #ffffff;
-    --noise-color: rgba(255, 255, 255, 0.03);
-    --card-bg: #2b2b2b;
-    --card-shadow: rgba(0,0,0,0.5);
-    --title-color: #f0f0f0;
-    --title-glow: #4CAF50;
-    --number-empty-bg: #2b2b2b;
-    --number-text: #ffffff;
-    --btn-bg: #4CAF50;
-    --btn-bg-hover: #5cdb5c;
-    --btn-text: #ffffff;
+    --body-bg: #2c3e50;
+    --body-text: #ecf0f1;
+    --card-bg: #34495e;
+    --card-shadow: rgba(0,0,0,0.4);
+    --number-bg: #2c3e50;
+    --number-text: #ecf0f1;
+    --button-bg: #e74c3c;
+    --button-hover-bg: #c0392b;
+    --button-text: #ffffff;
+    --noise-color: rgba(255, 255, 255, 0.05);
 }
 
-body.light-mode {
-    --body-bg: #f3f6f8;
-    --body-text: #1d1f23;
-    --noise-color: rgba(0, 0, 0, 0.05);
+[data-theme="light"] {
+    --body-bg: #ecf0f1;
+    --body-text: #2c3e50;
     --card-bg: #ffffff;
-    --card-shadow: rgba(26, 48, 82, 0.18);
-    --title-color: #1d1f23;
-    --title-glow: #2e8b57;
-    --number-empty-bg: #e8eef3;
-    --number-text: #1d1f23;
-    --btn-bg: #2e8b57;
-    --btn-bg-hover: #3ba96d;
-    --btn-text: #ffffff;
+    --card-shadow: rgba(0,0,0,0.1);
+    --number-bg: #ecf0f1;
+    --number-text: #2c3e50;
+    --button-bg: #3498db;
+    --button-hover-bg: #2980b9;
+    --button-text: #ffffff;
+    --noise-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="colorblind"] {
+    --body-bg: #f7f7f2;
+    --body-text: #1f2937;
+    --card-bg: #ffffff;
+    --card-shadow: rgba(0,0,0,0.15);
+    --number-bg: #e6edf5;
+    --number-text: #111827;
+    --button-bg: #005f73;
+    --button-hover-bg: #0a9396;
+    --button-text: #ffffff;
+    --noise-color: rgba(17, 24, 39, 0.04);
 }
 
 body {
@@ -90,81 +93,75 @@ body::before {
 }
 
 .top-controls {
-    display: contents;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 #theme-toggle {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 9999;
-    padding: 10px 16px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     border: none;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 #theme-toggle:hover {
-    background-color: var(--btn-bg-hover);
-    transform: translateY(-1px);
+    background-color: var(--button-hover-bg);
 }
 
 h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-    color: var(--title-color);
-    text-shadow: 0 0 10px var(--title-glow), 0 0 20px var(--title-glow);
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    margin-bottom: 30px;
+    font-size: 36px;
+    font-weight: 300;
 }
 
 .lotto-numbers {
     display: flex;
     justify-content: center;
-    margin: 40px 0;
-    perspective: 1000px;
+    margin-bottom: 40px;
 }
 
 .number {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 60px;
+    height: 60px;
+    background-color: var(--number-bg);
+    color: var(--number-text);
+    border-radius: 50%;
     margin: 0 10px;
     font-size: 28px;
     font-weight: bold;
-    color: var(--number-text);
-    background-color: var(--number-empty-bg);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: transform 0.5s ease, background-color 0.5s ease;
-    transform-style: preserve-3d;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 
-.number.shaking {
-    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+[data-theme="colorblind"] .number {
+    border: 2px solid #1f2937;
 }
 
 #generate {
-    padding: 15px 35px;
-    font-size: 22px;
-    cursor: pointer;
+    background-color: var(--button-bg);
+    color: var(--button-text);
     border: none;
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    border-radius: 10px;
-    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    box-shadow: 0 0 15px var(--btn-bg), inset 0 0 5px rgba(255, 255, 255, 0.2);
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 #generate:hover {
-    background-color: var(--btn-bg-hover);
-    box-shadow: 0 0 25px var(--btn-bg-hover), inset 0 0 10px rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
+    background-color: var(--button-hover-bg);
+}
+
+#generate:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
